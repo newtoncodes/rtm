@@ -8,6 +8,8 @@ const Emitters = {
 
 class RTMSocket {
     /**
+     * Wrap existing socket.
+     *
      * @param {Object} socket
      * @param {Object} [handlers]
      * @return {RTMSocket}
@@ -18,6 +20,8 @@ class RTMSocket {
     }
 
     /**
+     * Constructor.
+     *
      * @param {Object} socket
      * @param {Object} [handlers]
      */
@@ -57,6 +61,8 @@ class RTMSocket {
     }
 
     /**
+     * Invoke remote method
+     *
      * @param {string} method
      * @param {Object} [data]
      * @param {function} callback
@@ -78,6 +84,102 @@ class RTMSocket {
     }
 
     /**
+     * Sends a `message` event.
+     *
+     * @return {RTMSocket} self
+     * @api public
+     */
+    send() {
+        // Dummy. Only for IntelliSense.
+        return this;
+    }
+
+    /**
+     * Override `emit`.
+     * If the event is in `events`, it's emitted normally.
+     *
+     * @param {String} event name
+     * @return {RTMSocket} self
+     * @api public
+     */
+    emit(event) {
+        // Dummy. Only for IntelliSense.
+        return this;
+    }
+
+    /**
+     * Targets a room when broadcasting.
+     *
+     * @param {String} name
+     * @return {RTMSocket} self
+     * @api public
+     */
+    to(name) {
+        // Dummy. Only for IntelliSense.
+        return this;
+    }
+
+    /**
+     * Targets a room when broadcasting.
+     *
+     * @param {String} name
+     * @return {RTMSocket} self
+     * @api public
+     */
+    in(name) {
+        // Dummy. Only for IntelliSense.
+        return this;
+    }
+
+    /**
+     * Joins a room.
+     *
+     * @param {String} room
+     * @param {Function} [fn] callback
+     * @return {RTMSocket} self
+     * @api private
+     */
+    join(room, fn) {
+        // Dummy. Only for IntelliSense.
+        return this;
+    }
+
+    /**
+     * Leaves a room.
+     *
+     * @param {String} room
+     * @param {Function} [fn] callback
+     * @return {RTMSocket} self
+     * @api private
+     */
+    leave(room, fn) {
+        // Dummy. Only for IntelliSense.
+        return this;
+    }
+
+    /**
+     * Leave all rooms.
+     *
+     * @api private
+     */
+    leaveAll() {
+        // Dummy. Only for IntelliSense.
+    }
+
+    /**
+     * Disconnects this client.
+     *
+     * @param {Boolean} close if `true`, closes the underlying connection
+     * @return {RTMSocket} self
+     * @api public
+     */
+    disconnect(close) {
+        // Dummy. Only for IntelliSense.
+    }
+
+    /**
+     * Emit with callback.
+     *
      * @param {string} event
      * @param {...*} [params]
      * @param {function} [callback]
@@ -102,6 +204,8 @@ class RTMSocket {
     }
 
     /**
+     * Ping and get time.
+     *
      * @param {function} callback
      */
     ping(callback) {
@@ -159,6 +263,9 @@ class RTMSocket {
      * @private
      */
     _invokeHandler(id, method, data) {
+        id = parseInt(id);
+        if (isNaN(id)) return;
+
         if (method === '_____rtm_invoke_cb') {
             this._pullCallback(id)(...data);
             return;
@@ -189,12 +296,12 @@ class RTMSocket {
             return;
         }
 
-        if (!this._handlers.hasOwnProperty(method)) {
+        if (!this._handlers.hasOwnProperty(method) || (typeof this._handlers[method] !== 'function')) {
             callback([new Error('There is no method: ' + method)]);
             return;
         }
 
-        this._handlers[method].call(this, data, (...params) => callback(params));
+        this._handlers[method].call(this, data || {}, (...params) => callback(params));
     }
 
     /**
