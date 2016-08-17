@@ -373,6 +373,10 @@ class RTMSocket {
 
             this._socket = null;
         }
+
+        Object.keys(this._callbacks).forEach(id => {
+            this._pullCallback(id)(new Error('Connection closed unexpectedly.'));
+        });
     }
 }
 
