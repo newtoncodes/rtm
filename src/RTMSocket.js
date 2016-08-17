@@ -362,7 +362,11 @@ class RTMSocket {
 
         if (this._socket) {
             this._socket.off && this._socket.off('_____rtm_invoke', this._invokeHandler);
-            Object.keys(this._bound).forEach(fn => this._socket[fn] = () => {});
+            Object.keys(this._bound).forEach(fn => {
+                try {
+                    Object.defineProperty(this._socket, fn, {value: () => {}});
+                } catch (e) {}
+            });
             this._socket.rtm = null;
 
             this._emit(['disconnect_for_good']);
