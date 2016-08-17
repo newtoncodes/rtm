@@ -95,7 +95,7 @@ socket.on('connection', (socket) => {
     socket.once('disconnect_for_good', () => console.log('Connection closed.'));
     
     socket.getClientTime();
-    client.ping((error, time) => console.log('Ping result:', error, time));
+    socket.ping((error, time) => console.log('Ping result:', error, time));
     socket.emitSafe('testEvent', 'foo', 'bar', error => console.log('Emitted: testEvent'));
 });
 

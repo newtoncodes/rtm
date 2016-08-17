@@ -5,6 +5,8 @@ const Emitters = {
     client: require('component-emitter')
 };
 
+const RESERVED = ['send', 'emit', 'to', 'in', 'join', 'leave', 'leaveAll', 'disconnect'];
+
 
 class RTMSocket {
     /**
@@ -29,7 +31,7 @@ class RTMSocket {
         this._handlers = handlers || this._handlers || {};
         this._callbacks = {};
         this._callbackId = 1;
-        this._binded = {};
+        this._bound = {};
 
         this._isServer = (socket.__proto__ && socket.__proto__.__proto__ && socket.__proto__.__proto__.constructor === Emitters.server);
 
@@ -45,14 +47,35 @@ class RTMSocket {
 
         let proto = Object.getPrototypeOf(this);
         while (proto && proto !== Object.prototype && proto !== Function.prototype) {
-            functions = functions.concat(Object.getOwnPropertyNames(proto));
+            functions = functions.concat(Object.getOwnPropertyNames(proto).map(prop => {
+                return {name: prop, def: Object.getOwnPropertyDescriptor(proto, prop)};
+            }));
+
             proto = Object.getPrototypeOf(proto);
         }
 
-        functions = functions.filter(fn => typeof this[fn] === 'function' && fn[0] !== '_' && fn !== 'constructor');
-        functions.forEach(fn => {
-            this._socket[fn] = this[fn].bind(this);
-            this._binded[fn] = true;
+        functions = functions.filter(({name, def}) => {
+            if (name[0] === '_' || RESERVED.indexOf(name) !== -1) return false;
+
+            let getter = def.get;
+            let setter = def.set;
+            let value = def.value;
+
+            return (
+                (typeof getter === 'function') ||
+                (typeof setter === 'function') ||
+                (typeof value === 'function')
+            );
+        });
+
+        functions.forEach(({name, def}) => {
+            this._bound[name] = true;
+
+            if (def.get && typeof def.get === 'function') def.get = def.get.bind(this);
+            if (def.set && typeof def.set === 'function') def.set = def.set.bind(this);
+            if (def.value && typeof def.value === 'function') def.value = def.value.bind(this);
+
+            Object.defineProperty(this._socket, name, def);
         });
 
         this._socket.on('_____rtm_invoke', this._invokeHandler);
@@ -175,6 +198,16 @@ class RTMSocket {
      */
     disconnect(close) {
         // Dummy. Only for IntelliSense.
+    }
+
+    /**
+     * Emit local event (don't send via socket.io).
+     *
+     * @param {string} event
+     * @param {...*} [params]
+     */
+    emitLocal(event, params) {
+        this._emit(arguments);
     }
 
     /**
@@ -329,7 +362,7 @@ class RTMSocket {
 
         if (this._socket) {
             this._socket.off && this._socket.off('_____rtm_invoke', this._invokeHandler);
-            Object.keys(this._binded).forEach(fn => this._socket[fn] = () => {});
+            Object.keys(this._bound).forEach(fn => this._socket[fn] = () => {});
             this._socket.rtm = null;
 
             this._emit(['disconnect_for_good']);

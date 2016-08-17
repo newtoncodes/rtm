@@ -26,8 +26,8 @@ socket.on('connection', (socket) => {
     let int2 = setInterval(socket.getClientTime.bind(socket, socket), 3000);
     let int3 = setInterval(() => {
         socket.emitSafe('test-notification', Date.now(), Math.random(), () => console.log('Emitted: test-notification'));
+        console.log('Test: ' + socket.test);
     }, 3000);
-
 
     socket.once('disconnect_for_good', function () {
         console.log('Connection closed.');

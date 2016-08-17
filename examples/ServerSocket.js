@@ -41,6 +41,10 @@ class ServerSocket extends RTMSocket {
             console.log('Client time result:', error, result);
         });
     }
+
+    get test() {
+        return Date.now();
+    }
 }
 
 
