@@ -122,10 +122,11 @@ class RTMSocket {
      * If the event is in `events`, it's emitted normally.
      *
      * @param {String} event name
+     * @param {...*} [param]
      * @return {RTMSocket} self
      * @api public
      */
-    emit(event) {
+    emit(event, param) {
         // Dummy. Only for IntelliSense.
         return this;
     }
