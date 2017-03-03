@@ -1,7 +1,7 @@
 {
   "name": "rtm",
   "description": "Socket.io extension for invoking and emitting with callback",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "main": "./es5/RTMSocket.js",
   "scripts": {
     "build:es5": "babel src --out-dir es5",
