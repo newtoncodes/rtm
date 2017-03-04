@@ -118,6 +118,7 @@ class RTMSocket {
      */
     send() {
         // Dummy. Only for IntelliSense.
+        throw new Error('Don\'t call default socket.io methods from this. Use this._socket.');
         return this;
     }
 
@@ -132,6 +133,7 @@ class RTMSocket {
      */
     emit(event, param) {
         // Dummy. Only for IntelliSense.
+        throw new Error('Don\'t call default socket.io methods from this. Use this._socket.');
         return this;
     }
 
@@ -144,6 +146,7 @@ class RTMSocket {
      */
     to(name) {
         // Dummy. Only for IntelliSense.
+        throw new Error('Don\'t call default socket.io methods from this. Use this._socket.');
         return this;
     }
 
@@ -156,6 +159,7 @@ class RTMSocket {
      */
     in(name) {
         // Dummy. Only for IntelliSense.
+        throw new Error('Don\'t call default socket.io methods from this. Use this._socket.');
         return this;
     }
 
@@ -169,6 +173,7 @@ class RTMSocket {
      */
     join(room, fn) {
         // Dummy. Only for IntelliSense.
+        throw new Error('Don\'t call default socket.io methods from this. Use this._socket.');
         return this;
     }
 
@@ -182,6 +187,7 @@ class RTMSocket {
      */
     leave(room, fn) {
         // Dummy. Only for IntelliSense.
+        throw new Error('Don\'t call default socket.io methods from this. Use this._socket.');
         return this;
     }
 
@@ -192,6 +198,7 @@ class RTMSocket {
      */
     leaveAll() {
         // Dummy. Only for IntelliSense.
+        throw new Error('Don\'t call default socket.io methods from this. Use this._socket.');
     }
 
     /**
@@ -203,6 +210,7 @@ class RTMSocket {
      */
     disconnect(close) {
         // Dummy. Only for IntelliSense.
+        throw new Error('Don\'t call default socket.io methods from this. Use this._socket.');
     }
 
     /**
