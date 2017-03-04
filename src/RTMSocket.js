@@ -73,7 +73,7 @@ class RTMSocket {
         functions.forEach(({name, def}) => {
             this._bound[name] = true;
 
-            if (noOverride.indexOf(name) === -1) return;
+            if (noOverride.indexOf(name) !== -1) return;
 
             if (def.get && typeof def.get === 'function') def.get = def.get.bind(this);
             if (def.set && typeof def.set === 'function') def.set = def.set.bind(this);
