@@ -68,8 +68,12 @@ class RTMSocket {
             );
         });
 
+        let noOverride = ['send', 'emit', 'to', 'in', 'join', 'leave', 'leaveAll', 'disconnect'];
+
         functions.forEach(({name, def}) => {
             this._bound[name] = true;
+
+            if (noOverride.indexOf(name) === -1) return;
 
             if (def.get && typeof def.get === 'function') def.get = def.get.bind(this);
             if (def.set && typeof def.set === 'function') def.set = def.set.bind(this);
@@ -104,6 +108,101 @@ class RTMSocket {
 
         let id = this._pushCallback(callback);
         this._socket && this._socket.emit('_____rtm_invoke', id, method, data);
+    }
+
+    /**
+     * Sends a `message` event.
+     *
+     * @return {RTMSocket} self
+     * @api public
+     */
+    send() {
+        // Dummy. Only for IntelliSense.
+        return this;
+    }
+
+    /**
+     * Override `emit`.
+     * If the event is in `events`, it's emitted normally.
+     *
+     * @param {String} event name
+     * @param {...*} [param]
+     * @return {RTMSocket} self
+     * @api public
+     */
+    emit(event, param) {
+        // Dummy. Only for IntelliSense.
+        return this;
+    }
+
+    /**
+     * Targets a room when broadcasting.
+     *
+     * @param {String} name
+     * @return {RTMSocket} self
+     * @api public
+     */
+    to(name) {
+        // Dummy. Only for IntelliSense.
+        return this;
+    }
+
+    /**
+     * Targets a room when broadcasting.
+     *
+     * @param {String} name
+     * @return {RTMSocket} self
+     * @api public
+     */
+    in(name) {
+        // Dummy. Only for IntelliSense.
+        return this;
+    }
+
+    /**
+     * Joins a room.
+     *
+     * @param {String} room
+     * @param {Function} [fn] callback
+     * @return {RTMSocket} self
+     * @api private
+     */
+    join(room, fn) {
+        // Dummy. Only for IntelliSense.
+        return this;
+    }
+
+    /**
+     * Leaves a room.
+     *
+     * @param {String} room
+     * @param {Function} [fn] callback
+     * @return {RTMSocket} self
+     * @api private
+     */
+    leave(room, fn) {
+        // Dummy. Only for IntelliSense.
+        return this;
+    }
+
+    /**
+     * Leave all rooms.
+     *
+     * @api private
+     */
+    leaveAll() {
+        // Dummy. Only for IntelliSense.
+    }
+
+    /**
+     * Disconnects this client.
+     *
+     * @param {Boolean} close if `true`, closes the underlying connection
+     * @return {RTMSocket} self
+     * @api public
+     */
+    disconnect(close) {
+        // Dummy. Only for IntelliSense.
     }
 
     /**
